@@ -2,7 +2,7 @@
 services:
   opscenter:
     build: .
-    image: opscenter:latest
+    image: ghcr.io/georglabs/ops-center-new-v2:latest
     restart: unless-stopped
     ports:
       - "127.0.0.1:8000:8000"   # only this computer can reach it. For other machines: put HTTPS in front (see README)
