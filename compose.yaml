@@ -1,0 +1,28 @@
+# docker compose up -d --build      (needs a .env file - see README)
+services:
+  opscenter:
+    build: .
+    image: opscenter:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"   # only this computer can reach it. For other machines: put HTTPS in front (see README)
+    environment:
+      OPS_SECRET_KEY: ${OPS_SECRET_KEY:?Create a .env file with OPS_SECRET_KEY first (see README)}
+      # The first administrator - created on first start if the name does not exist yet. Required here,
+      # so a fresh install always has someone who can manage users.
+      OPS_ADMIN_USERNAME: ${OPS_ADMIN_USERNAME:?Set OPS_ADMIN_USERNAME in .env (see README)}
+      OPS_ADMIN_PASSWORD: ${OPS_ADMIN_PASSWORD:?Set OPS_ADMIN_PASSWORD in .env (see README, 12+ characters)}
+      OPS_ALLOW_REGISTRATION: ${OPS_ALLOW_REGISTRATION:-true}
+      OPS_DEV: "0"              # /docs, Traffic and Mission Control stay off in a container
+    volumes:
+      - opscenter-data:/data    # the database survives restarts and rebuilds
+    read_only: true             # the container cannot change its own code
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  opscenter-data:

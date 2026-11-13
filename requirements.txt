@@ -1,0 +1,12 @@
+# Runtime packages (this is what the Docker image installs)
+fastapi==0.162.0
+uvicorn[standard]==0.54.0
+sqlmodel==0.0.48
+pydantic==2.13.5
+pydantic-settings==2.16.2
+sqlalchemy==2.1.8
+alembic==1.20.1
+pwdlib[argon2]==0.3.1
+PyJWT==2.15.0
+python-multipart==0.0.33
+psutil==7.2.2

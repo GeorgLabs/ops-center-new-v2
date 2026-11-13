@@ -1,0 +1,6 @@
+# Everything for working on the project (setup.bat / setup.sh install this)
+-r requirements.txt
+fastapi-cli==0.0.32
+httpx2==2.16.0
+pytest==9.1.1
+ruff==0.17.4

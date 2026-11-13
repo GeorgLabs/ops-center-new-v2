@@ -1,0 +1,27 @@
+# Linux (systemd): runs the agent in the background and restarts it after a crash or reboot.
+#   sudo useradd --system --no-create-home opsagent
+#   sudo mkdir /opt/opsagent && sudo cp agent.py requirements.txt /opt/opsagent/
+#   sudo python3 -m venv /opt/opsagent/venv && sudo /opt/opsagent/venv/bin/pip install -r /opt/opsagent/requirements.txt
+#   echo 'ops_...your key...' | sudo tee /etc/opsagent.key && sudo chmod 640 /etc/opsagent.key && sudo chgrp opsagent /etc/opsagent.key
+#   sudo cp agent.env.example /etc/opsagent.env   (edit it)
+#   sudo cp opsagent.service /etc/systemd/system/ && sudo systemctl enable --now opsagent
+[Unit]
+Description=Ops Center agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=opsagent
+EnvironmentFile=/etc/opsagent.env
+ExecStart=/opt/opsagent/venv/bin/python /opt/opsagent/agent.py
+Restart=always
+RestartSec=10
+# Exit code 2 = the key was rejected: restarting will not help
+RestartPreventExitStatus=2
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
